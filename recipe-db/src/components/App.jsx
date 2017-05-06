@@ -2,8 +2,23 @@ import React from 'react';
 
 import RecipeDetail from './RecipeDetail.jsx';
 import RecipeList from './RecipeList.jsx';
+import CreateForm from './CreateForm.jsx';
 
 class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      showCreate: false
+    };
+
+    this.showCreate = this.showCreate.bind(this);
+  }
+
+  showCreate() {
+    this.setState = ({ showCreate: true });
+  }
+
   render() {
     return (
       <div className='container'>
@@ -18,6 +33,7 @@ class App extends React.Component {
                 width: '100%',
                 marginBottom: '5px'
               }}
+              onClick={ this.showCreate }
             >
               Create new recipe
             </button>
@@ -25,7 +41,7 @@ class App extends React.Component {
           </div>
 
           <div className="col-xs-8">
-            <RecipeDetail />
+            { this.state.showCreate ? <CreateForm /> : <RecipeDetail /> }
           </div>
         </div>
       </div>
