@@ -5,10 +5,12 @@ import TodoList from './Todolist.jsx';
 
 class App extends React.Component {
   render() {
-    return <div>
-      <Header />
-      <TodoList />
-    </div>;
+    return (
+      <div>
+        <Header />
+        <TodoList />
+      </div>
+    );
   }
 }
 
