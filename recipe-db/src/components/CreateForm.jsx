@@ -8,7 +8,8 @@ class CreateForm extends React.Component {
     this.state = {
       name: '',
       ingredients: '',
-      instructions: ''
+      instructions: '',
+      created: false
     };
 
     this.handleChangeName = this.handleChangeName.bind(this);
@@ -35,17 +36,28 @@ class CreateForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    // setting up the PropType - tells React what to expect for onSubmit calls
     const { name, ingredients, instructions } = this.state;
     this.props.onSubmit(name, ingredients, instructions);
+    this.resetForm();
+    this.setState({ created: true });
+    this.refs.name.focus();
+  }
+
+  resetForm() {
+    this.setState({
+      name: '',
+      ingredients: '',
+      instructions: ''
+    });
   }
 
   render() {
     // ES6 destructuring
-    const { name, ingredients, instructions } = this.state;
+    const { name, ingredients, instructions, created } = this.state;
 
     return (
       <form onSubmit={ this.handleSubmit }>
+        { created && <div className="alert alert-success">Your recipe was created</div>}
         <div className='form-group'>
           <label htmlFor='name'>Recipe name:</label>
           <input
@@ -55,6 +67,7 @@ class CreateForm extends React.Component {
             placeholder='Enter recipe name here'
             value={ name }
             onChange={ this.handleChangeName }
+            ref='name'
           />
         </div>
 
@@ -82,11 +95,13 @@ class CreateForm extends React.Component {
           />
         </div>
 
+        <input className='btn btn-default' type='submit' value='Create' />
       </form>
     );
   }
 }
 
+// setting up the PropType - tells React what to expect for onSubmit calls
 CreateForm.propTypes = {
   onSubmit: PropTypes.func.isRequired
 }
