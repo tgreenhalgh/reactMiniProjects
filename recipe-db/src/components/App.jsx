@@ -3,6 +3,7 @@ import React from 'react';
 import RecipeDetail from './RecipeDetail.jsx';
 import RecipeList from './RecipeList.jsx';
 import CreateForm from './CreateForm.jsx';
+import SearchBox from './SearchBox.jsx';
 
 const  LOCAL_STORAGE_KEY = 'recipes';
 
@@ -16,13 +17,15 @@ class App extends React.Component {
     this.state = {
       showCreate: false,
       recipes: localStorageRecipes ? JSON.parse(localStorageRecipes) : [],
-      selectedRecipe: null
+      selectedRecipe: null,
+      search: ''
     };
 
     this.showCreateForm = this.showCreateForm.bind(this);
     this.handleCreateRecipe = this.handleCreateRecipe.bind(this);
     this.handleSelectRecipe = this.handleSelectRecipe.bind(this);
     this.handleDeleteRecipe = this.handleDeleteRecipe.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   showCreateForm() {
@@ -61,6 +64,12 @@ class App extends React.Component {
     });
   }
 
+  handleSearchChange(search) {
+    this.setState({
+      search
+    });
+  }
+
   updateRecipes(newRecipes) {
     this.setState({
       recipes: newRecipes
@@ -71,6 +80,11 @@ class App extends React.Component {
   }
 
   render() {
+    const { recipes, selectedRecipe, showCreate, search } = this.state;
+
+    const filteredRecipes = recipes
+      .filter(recipe => recipe.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
+
     return (
       <div className='container'>
         <h1>Recipe Database</h1>
@@ -88,16 +102,17 @@ class App extends React.Component {
             >
               Create new recipe
             </button>
+            <SearchBox onChange={ this.handleSearchChange } />
             <RecipeList
-              recipes={ this.state.recipes }
+              recipes={ filteredRecipes }
               onSelectRecipe={ this.handleSelectRecipe }
             />
           </div>
 
           <div className="col-xs-8">
-            { this.state.showCreate
+            { showCreate
               ? <CreateForm onSubmit={ this.handleCreateRecipe }/>
-              : <RecipeDetail recipe={ this.state.selectedRecipe } onDelete={ this.handleDeleteRecipe }/> }
+              : <RecipeDetail recipe={ selectedRecipe } onDelete={ this.handleDeleteRecipe }/> }
           </div>
         </div>
       </div>
