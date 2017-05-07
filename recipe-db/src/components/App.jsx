@@ -4,13 +4,18 @@ import RecipeDetail from './RecipeDetail.jsx';
 import RecipeList from './RecipeList.jsx';
 import CreateForm from './CreateForm.jsx';
 
+const  LOCAL_STORAGE_KEY = 'recipes';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
 
+    // get data from local storage (returns a string or null)
+    const localStorageRecipes = window.localStorage.getItem(LOCAL_STORAGE_KEY);
+
     this.state = {
       showCreate: false,
-      recipes: [],
+      recipes: localStorageRecipes ? JSON.parse(localStorageRecipes) : [],
       selectedRecipe: null
     };
 
@@ -38,6 +43,9 @@ class App extends React.Component {
     this.setState({
       recipes: newRecipes
     });
+
+    // local storage works with strings only
+    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newRecipes));
   }
 
   handleSelectRecipe(recipe) {
