@@ -22,6 +22,7 @@ class App extends React.Component {
     this.showCreateForm = this.showCreateForm.bind(this);
     this.handleCreateRecipe = this.handleCreateRecipe.bind(this);
     this.handleSelectRecipe = this.handleSelectRecipe.bind(this);
+    this.handleDeleteRecipe = this.handleDeleteRecipe.bind(this);
   }
 
   showCreateForm() {
@@ -40,12 +41,7 @@ class App extends React.Component {
       instructions
     });
 
-    this.setState({
-      recipes: newRecipes
-    });
-
-    // local storage works with strings only
-    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newRecipes));
+    this.updateRecipes(newRecipes);
   }
 
   handleSelectRecipe(recipe) {
@@ -53,6 +49,25 @@ class App extends React.Component {
       selectedRecipe: recipe,
       showCreate: false
     });
+  }
+
+  handleDeleteRecipe(recipeToDelete) {
+    const newRecipes = this.state.recipes.filter(recipe => recipe !== recipeToDelete);
+    this.updateRecipes(newRecipes);
+
+    // deleted recipe is still selected, so un-select
+    this.setState({
+      selectedRecipe: null
+    });
+  }
+
+  updateRecipes(newRecipes) {
+    this.setState({
+      recipes: newRecipes
+    });
+
+    // local storage works with strings only
+    window.localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newRecipes));
   }
 
   render() {
@@ -82,7 +97,7 @@ class App extends React.Component {
           <div className="col-xs-8">
             { this.state.showCreate
               ? <CreateForm onSubmit={ this.handleCreateRecipe }/>
-              : <RecipeDetail recipe={ this.state.selectedRecipe }/> }
+              : <RecipeDetail recipe={ this.state.selectedRecipe } onDelete={ this.handleDeleteRecipe }/> }
           </div>
         </div>
       </div>
