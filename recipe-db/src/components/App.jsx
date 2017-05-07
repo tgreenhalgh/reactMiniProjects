@@ -5,18 +5,20 @@ import RecipeList from './RecipeList.jsx';
 import CreateForm from './CreateForm.jsx';
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      showCreate: false
+      showCreate: true
     };
 
-    this.showCreate = this.showCreate.bind(this);
+    this.showCreateForm = this.showCreateForm.bind(this);
   }
 
-  showCreate() {
-    this.setState = ({ showCreate: true });
+  showCreateForm() {
+    this.setState({
+      showCreate: false
+    });
   }
 
   render() {
@@ -33,7 +35,7 @@ class App extends React.Component {
                 width: '100%',
                 marginBottom: '5px'
               }}
-              onClick={ this.showCreate }
+              onClick={ this.showCreateForm }
             >
               Create new recipe
             </button>
