@@ -9,7 +9,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      showCreate: true
+      showCreate: true,
+      recipes: []
     };
 
     this.showCreateForm = this.showCreateForm.bind(this);
@@ -23,7 +24,18 @@ class App extends React.Component {
   }
 
   handleCreateRecipe(name, ingredients, instructions) {
-    console.log(name, ingredients, instructions);
+    // DON'T mutate the state array directly! Make a copy
+    const newRecipes = this.state.recipes.concat({
+      id: new Date().getTime(), // time in miliseconds (a unique key)
+      // name: name <-- ES6, if both same, just need one
+      name,
+      ingredients,
+      instructions
+    });
+
+    this.setState({
+      recipes: newRecipes
+    });
   }
 
   render() {
@@ -44,7 +56,7 @@ class App extends React.Component {
             >
               Create new recipe
             </button>
-            <RecipeList />
+            <RecipeList recipes={ this.state.recipes }/>
           </div>
 
           <div className="col-xs-8">
