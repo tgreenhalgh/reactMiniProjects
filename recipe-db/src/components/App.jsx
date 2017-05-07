@@ -83,7 +83,8 @@ class App extends React.Component {
     const { recipes, selectedRecipe, showCreate, search } = this.state;
 
     const filteredRecipes = recipes
-      .filter(recipe => recipe.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
+      .filter(recipe => recipe.name.toLowerCase().indexOf(search.toLowerCase()) > -1)
+      .sort((a, b) => a.name > b.name);
 
     return (
       <div className='container'>
