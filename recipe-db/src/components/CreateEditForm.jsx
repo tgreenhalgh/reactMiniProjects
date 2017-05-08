@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class CreateForm extends React.Component {
+class CreateEditForm extends React.Component {
   constructor() {
     super();
 
@@ -16,6 +16,23 @@ class CreateForm extends React.Component {
     this.handleChangeIngredients = this.handleChangeIngredients.bind(this);
     this.handleChangeInstructions = this.handleChangeInstructions.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.setStateFromRecipe(this.props.recipe);
+  }
+
+  // useful because can compare current props this.props with the updated props, nextProps
+  componentWillReceiveProps(nextProps) {
+    this.setStateFromRecipe(nextProps.recipe);
+  }
+
+  setStateFromRecipe(recipe) {
+    this.setState({
+      name: recipe ? recipe.name : '',
+      ingredients: recipe ? recipe.ingredients : '',
+      instructions: recipe ? recipe.instructions : ''
+    });
   }
 
   handleChangeName(event) {
@@ -37,10 +54,16 @@ class CreateForm extends React.Component {
     event.preventDefault();
 
     const { name, ingredients, instructions } = this.state;
-    this.props.onSubmit(name, ingredients, instructions);
-    this.resetForm();
-    this.setState({ created: true });
-    this.refs.name.focus();
+
+    if (this.props.recipe) {
+      this.props.onEdit(name, ingredients, instructions);
+    } else {
+      this.props.onSubmit(name, ingredients, instructions);
+
+      this.resetForm();
+      this.setState({ created: true });
+      this.refs.name.focus();
+    }
   }
 
   resetForm() {
@@ -54,6 +77,7 @@ class CreateForm extends React.Component {
   render() {
     // ES6 destructuring
     const { name, ingredients, instructions, created } = this.state;
+    const { recipe } = this.props;
 
     return (
       <form onSubmit={ this.handleSubmit }>
@@ -95,15 +119,22 @@ class CreateForm extends React.Component {
           />
         </div>
 
-        <input className='btn btn-default' type='submit' value='Create' />
+        <input
+          className='btn btn-default'
+          type='submit'
+          value={ this.props.recipe ? 'Edit' : 'Create' }
+        />
       </form>
     );
   }
 }
 
 // setting up the PropType - tells React what to expect for onSubmit calls
-CreateForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+CreateEditForm.propTypes = {
+  onCreate: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  // note: null counts are doesn't exists, so isRequired fails when recipe is null
+  recipe: PropTypes.object
 }
 
-export default CreateForm;
+export default CreateEditForm;
