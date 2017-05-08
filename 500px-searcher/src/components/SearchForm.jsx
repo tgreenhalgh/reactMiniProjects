@@ -1,6 +1,14 @@
 import React from 'react';
 
 class SearchForm extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      query: ''
+    };
+  }
+
   render() {
     return (
       <form className='form-inline'>
@@ -10,7 +18,8 @@ class SearchForm extends React.Component {
             className='form-control'
             id='search'
             placeholder='Enter your search'
-            style={{ marginRight: '5px'}}
+            style={{ marginRight: '5px' }}
+            onChange={ (e) => this.setState({ query: e.target.value }) }
           />
         </div>
 
