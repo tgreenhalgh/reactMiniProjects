@@ -38,3 +38,6 @@ jspm_packages
 
 # Webpack Output
 dist
+
+# API key
+config.js

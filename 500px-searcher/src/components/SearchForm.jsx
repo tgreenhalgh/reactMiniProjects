@@ -26,7 +26,7 @@ class SearchForm extends React.Component {
 
   render() {
     return (
-      // note: this.handleSubmit.bind(this) no needed because using Class Property Syntax
+      // note: this.handleSubmit.bind(this) not needed because using Class Property Syntax
       <form className='form-inline' onSubmit={ this.handleSubmit }>
         <div className='form-group'>
           <input
@@ -37,7 +37,6 @@ class SearchForm extends React.Component {
             style={{ marginRight: '5px' }}
             onChange={ (e) => {
               this.setState({ query: e.target.value });
-              console.log(this.state.query);
             }}
           />
         </div>
