@@ -1,8 +1,17 @@
 import React from 'react';
 
 import SearchForm from './SearchForm.jsx';
+import Thumbnails from './Thumbnails.jsx';
 
 class Search extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      photos: []
+    };
+  }
+
   // using ES 2015 Class Property Syntax
   // search(query) {
   search = (query) => {
@@ -15,7 +24,7 @@ class Search extends React.Component {
       .then(response => response.json())
       // take the json, do whatever
       .then(json => {
-        console.log(json);
+        this.setState({ photos: json.photos });
       })
       .catch(error => {
         console.error(error);
@@ -23,9 +32,18 @@ class Search extends React.Component {
   }
 
   render() {
+    const { photos } = this.state;
     return (
       <div>
-        <SearchForm onSearch={ this.search  }/>
+        <div
+          style={{
+            marginBottom: '20px'
+          }}
+        >
+          <SearchForm onSearch={ this.search  }/>
+        </div>
+
+        <Thumbnails photos={ photos } />
       </div>
     );
   }
